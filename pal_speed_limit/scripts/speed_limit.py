@@ -175,7 +175,7 @@ class SpeedLimiter:
         r = self.sensors[frame_name]
         if self.type == 'laser':
             lx = self.tf.x_axis(frame_name)
-            ly = self.tf.x_axis(frame_name)
+            ly = self.tf.y_axis(frame_name)
             ranges = list(r.ranges)
             for i,rr in enumerate(ranges):
                 if rr < r.range_min:
