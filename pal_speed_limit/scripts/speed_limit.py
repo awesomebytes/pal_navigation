@@ -1,6 +1,5 @@
 #!/usr/bin/env python
 
-import roslib; roslib.load_manifest('pal_speed_limit')
 import rospy
 import sensor_msgs.msg as SM
 import geometry_msgs.msg as GM
