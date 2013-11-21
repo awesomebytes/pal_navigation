@@ -57,7 +57,7 @@ class Transformer:
         in the /base_link coordinate frame. All calculations are done in
         /base_link frame.  """
         if not frame_name in self.transforms:
-            raise SpeedLimitException("not transform exists for frame '{}'".format(frame_name))
+            raise SpeedLimitException("no transform exists for frame '{}'".format(frame_name))
         trp = self.vect(self.transforms[frame_name].translation)
         out_vel = GM.Twist()
         out_vel.angular = vel.angular
@@ -76,7 +76,7 @@ class Transformer:
 
     def transform_axis(self, frame_name, axis):
         if not frame_name in self.transforms:
-            raise SpeedLimitException("not transform exists for frame '{}'".format(frame_name))
+            raise SpeedLimitException("no transform exists for frame '{}'".format(frame_name))
         rotM = TT.quaternion_matrix(self.quat(self.transforms[frame_name].rotation))
         posH = numpy.resize(axis, 4)
         posH[3] = 1
@@ -96,7 +96,7 @@ class Transformer:
         the mobile base velocity. It uses tricks to provide an acceptable
         behavior.  """
         if not frame_name in self.transforms:
-            raise SpeedLimitException("not transform exists for frame '{}'".format(frame_name))
+            raise SpeedLimitException("no transform exists for frame '{}'".format(frame_name))
         ang_base = self.vect(twist_base.angular)
         lin_base = self.vect(twist_base.linear)
         trp = self.no_z(self.vect(self.transforms[frame_name].translation))
