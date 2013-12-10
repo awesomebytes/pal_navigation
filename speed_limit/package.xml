@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <package>
-  <name>pal_speed_limit</name>
+  <name>speed_limit</name>
   <version>0.1.0</version>
   <description>Filter velocity commands to avoid collisions with obstacles.</description>
 
