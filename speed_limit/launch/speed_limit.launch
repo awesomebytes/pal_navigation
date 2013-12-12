@@ -1,0 +1,13 @@
+<launch>
+  <arg name="cmd_vel_in"  default="speed_limit/cmd_vel_in"/>
+  <arg name="cmd_vel_out" default="speed_limit/cmd_vel_out"/>
+
+  <arg name="config"/>
+
+  <rosparam file="$(arg config)" command="load"/>
+
+  <node pkg="speed_limit" type="speed_limit.py" name="speed_limit">
+    <remap from="speed_limit/cmd_vel_in"  to="$(arg cmd_vel_in)"/>
+    <remap from="speed_limit/cmd_vel_out" to="$(arg cmd_vel_out)"/>
+  </node>
+</launch>
