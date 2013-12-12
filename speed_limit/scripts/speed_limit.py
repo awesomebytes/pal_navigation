@@ -178,26 +178,31 @@ class SpeedLimiter:
             ranges = list(r.ranges)
             for i,rr in enumerate(ranges):
                 if rr < r.range_min:
-                    ranges[i] = 1e3
+                    ranges[i] = r.range_max # a simple way to discard the reading
             idx = r.ranges.index(min(ranges))
             hdg = idx * r.angle_increment + r.angle_min
             sdir = math.cos(hdg) * lx + math.sin(hdg) * ly
             srange = r.ranges[idx]
         elif self.type == 'range':
             srange = r.range
-            if srange > r.max_range - 0.01:
-                srange = 1e3
             sdir = self.tf.x_axis(frame_name)
         else:
             raise SpeedLimitException("panic.")
         return srange, sdir
 
+    def _valid_sensor_data(self, data):
+        if self.type == 'range':
+            if data.range < data.min_range or data.range > data.max_range:
+                return False
+        return True
+
     def _topic_callback(self, data):
         frame = data.header.frame_id
         if frame[0] != '/':
             frame = '/' + frame
-        self.sensors[frame] = data
         self.tf.add_frame(frame)
+        if self._valid_sensor_data(data):
+            self.sensors[frame] = data
 
 
 class SpeedLimit:
