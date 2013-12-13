@@ -140,13 +140,14 @@ class SpeedLimiter:
         """ Returns a Twist, which will hopefully be safer to use in
         cluttered environments and should remain unchanged otherwise. """
         out_vel = vel
-        for f, r in self.sensors.iteritems():
+        for frame in self.sensors.keys():
+            r = self.sensors[frame]  # note: .iteritems() is not thread-safe
             try:
-                sensor_vel = self.tf.vect(self.tf.transform_vel(out_vel, f).linear)
+                sensor_vel = self.tf.vect(self.tf.transform_vel(out_vel, frame).linear)
             except SpeedLimitException:
-                self.tf.add_frame(f)
+                self.tf.add_frame(frame)
                 continue
-            srange, sdir = self._get_range(f)
+            srange, sdir = self._get_range(frame)
             if srange > self.obstacle_max_dist:
                 continue
             allowed_speed_in_sdir = srange * self.speed_factor
@@ -155,10 +156,10 @@ class SpeedLimiter:
                 continue
             if srange < self.stop_dist:
                 return GM.Twist()
-            vel_diff = -(projected_vel - allowed_speed_in_sdir) * self.tf.x_axis(f)
+            vel_diff = -(projected_vel - allowed_speed_in_sdir) * self.tf.x_axis(frame)
             if numpy.linalg.norm(vel_diff) > numpy.linalg.norm(sensor_vel):
                 vel_diff *= numpy.linalg.norm(sensor_vel)/numpy.linalg.norm(vel_diff)
-            out_vel = self.tf.add_vel_to_base(f, out_vel, vel_diff)
+            out_vel = self.tf.add_vel_to_base(frame, out_vel, vel_diff)
         return out_vel
 
     def _read_config(self, cfg):
