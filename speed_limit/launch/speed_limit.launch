@@ -6,7 +6,7 @@
 
   <rosparam file="$(arg config)" command="load"/>
 
-  <node pkg="speed_limit" type="speed_limit.py" name="speed_limit">
+  <node pkg="speed_limit" type="speed_limit.py" name="speed_limit" clear_params="true">
     <remap from="speed_limit/cmd_vel_in"  to="$(arg cmd_vel_in)"/>
     <remap from="speed_limit/cmd_vel_out" to="$(arg cmd_vel_out)"/>
   </node>
