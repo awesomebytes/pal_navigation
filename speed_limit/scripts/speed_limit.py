@@ -133,6 +133,7 @@ class SpeedLimiter:
 
         self._read_config(cfg_item)
         self.sensors = {}
+        self.stamps = {}
         self.tf = Transformer(fixed=cfg_item['fixed'])
         self.subscriber = rospy.Subscriber(cfg_item['topic'], self.msg_type[self.type], self._topic_callback)
 
@@ -141,6 +142,8 @@ class SpeedLimiter:
         cluttered environments and should remain unchanged otherwise. """
         out_vel = vel
         for frame in self.sensors.keys():
+            if rospy.get_time() - self.stamps[frame] > 1.0: # discard old readings
+                continue
             r = self.sensors[frame]  # note: .iteritems() is not thread-safe
             try:
                 sensor_vel = self.tf.vect(self.tf.transform_vel(out_vel, frame).linear)
@@ -204,6 +207,7 @@ class SpeedLimiter:
         self.tf.add_frame(frame)
         if self._valid_sensor_data(data):
             self.sensors[frame] = data
+            self.stamps[frame] = rospy.get_time()
 
 
 class SpeedLimit:
