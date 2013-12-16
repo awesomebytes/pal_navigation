@@ -150,8 +150,8 @@ class SpeedLimiter:
             except SpeedLimitException:
                 self.tf.add_frame(frame)
                 continue
-            srange, sdir = self._get_range(frame)
-            if srange > self.obstacle_max_dist:
+            srange, sdir, smax = self._get_range(frame)
+            if srange >= min(self.obstacle_max_dist, smax):
                 continue
             allowed_speed_in_sdir = srange * self.speed_factor
             projected_vel = numpy.dot(sensor_vel, sdir)
@@ -175,6 +175,7 @@ class SpeedLimiter:
     def _get_range(self, frame_name):
         srange = None
         sdir = None
+        smax_range = None
         r = self.sensors[frame_name]
         if self.type == 'laser':
             lx = self.tf.x_axis(frame_name)
@@ -187,12 +188,14 @@ class SpeedLimiter:
             hdg = idx * r.angle_increment + r.angle_min
             sdir = math.cos(hdg) * lx + math.sin(hdg) * ly
             srange = r.ranges[idx]
+            smax_range = r.range_max
         elif self.type == 'range':
             srange = r.range
             sdir = self.tf.x_axis(frame_name)
+            smax_range = r.max_range
         else:
             raise SpeedLimitException("panic.")
-        return srange, sdir
+        return srange, sdir, smax_range
 
     def _valid_sensor_data(self, data):
         if self.type == 'range':
