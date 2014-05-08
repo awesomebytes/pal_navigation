@@ -30,7 +30,7 @@ class TfStreamFilter:
 
     def _mat44_from_transform(self, tr):
         translation = [tr.translation.x, tr.translation.y, tr.translation.z]
-        rotation = [tr.rotation.x, tr.rotation.y, tr.rotatin.z, tr.rotation.w]
+        rotation = [tr.rotation.x, tr.rotation.y, tr.rotation.z, tr.rotation.w]
         return numpy.dot(TT.translation_matrix(translation),
                          TT.quaternion_matrix(rotation))
 
