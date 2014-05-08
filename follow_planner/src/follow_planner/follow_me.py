@@ -4,7 +4,7 @@ import geometry_msgs.msg as GM
 import tf.transformations as TT
 from tf_lookup import TfStreamClient
 from actionlib import SimpleActionClient
-from move_base.msg import MoveBaseAction, MoveBaseGoal
+from move_base_msgs.msg import MoveBaseAction, MoveBaseGoal
 
 
 class TfStreamFilter:
