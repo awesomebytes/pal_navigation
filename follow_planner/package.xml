@@ -21,15 +21,20 @@
   <build_depend>roscpp</build_depend>
   <build_depend>tf</build_depend>
 
+  <run_depend>actionlib</run_depend>
   <run_depend>costmap_2d</run_depend>
   <run_depend>dynamic_reconfigure</run_depend>
   <run_depend>geometry_msgs</run_depend>
+  <run_depend>move_base</run_depend>
   <run_depend>nav_core</run_depend>
   <run_depend>nav_msgs</run_depend>
   <run_depend>navfn</run_depend>
+  <run_depend>numpy</run_depend>
   <run_depend>pluginlib</run_depend>
   <run_depend>roscpp</run_depend>
+  <run_depend>rospy</run_depend>
   <run_depend>tf</run_depend>
+  <run_depend>tf_lookup</run_depend>
 
   <export>
       <nav_core plugin="${prefix}/follow_planner_plugins.xml" />
